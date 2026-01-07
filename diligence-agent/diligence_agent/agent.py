@@ -116,7 +116,7 @@ async def chat():
             ),
             tools=["Glob", "Read", "Bash", "Write"],
             prompt=risk_assessor_prompt,
-            model="haiku"
+            model="opus"  # Opus for complex risk synthesis and judgment
         ),
         "report-writer": AgentDefinition(
             description=(
@@ -128,7 +128,7 @@ async def chat():
             ),
             tools=["Skill", "Write", "Glob", "Read", "Bash"],
             prompt=report_writer_prompt,
-            model="haiku"
+            model="sonnet"  # Sonnet for professional report writing
         )
     }
 
@@ -163,6 +163,7 @@ async def chat():
     print("=" * 60)
     print("\nAnalyze documents for M&A transactions and generate")
     print("comprehensive due diligence reports with risk assessment.")
+    print("\nModels: Haiku (analysts) → Opus (risk) → Sonnet (report)")
     print("\nWorkflow:")
     print("  1. Upload documents to files/uploads/")
     print("  2. Request diligence review")
