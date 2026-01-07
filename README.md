@@ -1,68 +1,96 @@
-# Claude Agent SDK Demos
+# M&A Due Diligence Agent
 
-> ⚠️ **IMPORTANT**: These are demo applications by Anthropic. They are intended for local development only and should NOT be deployed to production or used at scale.
+A multi-agent system built on the [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code/sdk/sdk-overview) for comprehensive M&A transaction due diligence.
 
-This repository contains multiple demonstrations of the [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code/sdk/sdk-overview), showcasing different ways to build AI-powered applications with Claude.
+## Overview
 
-## Available Demos
+The Diligence Agent automates document review for M&A transactions by orchestrating specialized subagents to:
 
-### 📧 [Email Agent](./email-agent)
-An in-development IMAP email assistant that can:
-- Display your inbox
-- Perform agentic search to find emails
-- Provide AI-powered email assistance
+- **Analyze uploaded documents** across financial, legal, and operational categories
+- **Identify red flags** that could impact the transaction
+- **Assess risks** with severity ratings and quantified impacts
+- **Generate professional reports** suitable for board/investment committee review
 
-### 📊 [Excel Demo](./excel-demo)
-Demonstrations of working with spreadsheets and Excel files using Claude.
+## Architecture
 
-### 👋 [Hello World](./hello-world)
-A simple getting-started example to help you understand the basics of the Claude Agent SDK.
-
-### 🔬 [Research Agent](./research-agent)
-A multi-agent research system that coordinates specialized subagents to research topics and generate comprehensive reports:
-- Breaks research requests into subtopics
-- Spawns parallel researcher agents to search the web
-- Synthesizes findings into detailed reports
-- Demonstrates detailed subagent activity tracking
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      LEAD AGENT (Coordinator)                    │
+└────────────────┬────────────────┬────────────────┬──────────────┘
+                 │                │                │
+                 ▼                ▼                ▼
+┌────────────────────┐ ┌──────────────────┐ ┌─────────────────────┐
+│  FINANCIAL ANALYST │ │   LEGAL ANALYST  │ │  DOCUMENT ANALYZER  │
+│  Revenue, margins  │ │  Contracts, CoC  │ │  Governance, ops    │
+└────────┬───────────┘ └────────┬─────────┘ └──────────┬──────────┘
+         └──────────────────────┼──────────────────────┘
+                                ▼
+                 ┌──────────────────────────┐
+                 │      RISK ASSESSOR       │
+                 │  Synthesize & prioritize │
+                 └────────────┬─────────────┘
+                              ▼
+                 ┌──────────────────────────┐
+                 │      REPORT WRITER       │
+                 │  Professional PDF output │
+                 └──────────────────────────┘
+```
 
 ## Quick Start
 
-Each demo has its own directory with dedicated setup instructions. Navigate to the specific demo folder and follow its README for setup and usage details.
+```bash
+cd diligence-agent
 
+# Install dependencies
+uv sync
+
+# Set up API key
+cp .env.example .env
+# Edit .env and add your ANTHROPIC_API_KEY
+
+# Run the agent
+uv run python diligence_agent/agent.py
+```
+
+## Usage
+
+1. **Upload documents** to `files/uploads/`
+2. **Start review** with `/diligence` command
+3. **Get report** from `files/reports/`
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `/diligence` | Full comprehensive review |
+| `/financial` | Financial-focused analysis |
+| `/legal` | Legal/contract-focused analysis |
+| `/risk` | Risk assessment from existing analysis |
+| `/report` | Generate PDF report |
+
+## Red Flags Detected
+
+**Financial**: Customer concentration, declining margins, cash flow issues, off-balance sheet items
+
+**Legal**: Change of control terminations, consent requirements, pending litigation, IP issues
+
+**Operational**: Key person dependencies, integration complexity, compliance gaps
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) runtime (or Node.js 18+)
-- An Anthropic API key ([get one here](https://console.anthropic.com))
+- Python 3.10+
+- [uv](https://docs.astral.sh/uv/) package manager
+- Anthropic API key ([get one here](https://console.anthropic.com))
 
-## Getting Started
+## Documentation
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/anthropics/claude-code-sdk-demos.git
-cd claude-code-sdk-demos
-```
-
-2. **Choose a demo and navigate to its directory**
-```bash
-cd email-agent  # or excel-demo, or hello-world
-```
-
-3. **Follow the demo-specific README** for setup and usage instructions
+See [diligence-agent/README.md](./diligence-agent/README.md) for detailed documentation.
 
 ## Resources
 
 - [Claude Agent SDK Documentation](https://docs.anthropic.com/en/docs/claude-code/sdk/sdk-overview)
 - [API Reference](https://docs.anthropic.com/claude)
-- [GitHub Issues](https://github.com/anthropics/sdk-demos/issues)
-
-## Support
-
-These are demo applications provided as-is. For issues related to:
-- **Claude Agent SDK**: [SDK Documentation](https://docs.anthropic.com/claude-code)
-- **Demo Issues**: [GitHub Issues](https://github.com/anthropics/sdk-demos/issues)
-- **API Questions**: [Anthropic Support](https://support.anthropic.com)
 
 ## License
 
-MIT - This is sample code for demonstration purposes.
+MIT
